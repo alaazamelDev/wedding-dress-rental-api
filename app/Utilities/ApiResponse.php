@@ -19,7 +19,7 @@ abstract class ApiResponse
     public static function response($status, $code, $message, $data = []): JsonResponse
     {
         return response()->json([
-            'status' => $status,
+            'status_code' => $status,
             'message' => $message,
             'data' => $data,
         ], $code);
@@ -36,7 +36,7 @@ abstract class ApiResponse
     public static function validationError($validator): JsonResponse
     {
         return response()->json([
-            "status" => "fail",
+            "status_code" => "fail",
             "errors" => $validator->errors()
         ], 422);
     }

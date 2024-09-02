@@ -5,15 +5,14 @@ namespace App\Exceptions;
 use Exception;
 use Throwable;
 
-class NotFoundException extends Exception
+class ForbiddenException extends Exception
 {
     public function __construct(
-        string     $message = "The required Entity was not found",
-        int        $code = 404,
+        string     $message = "You don't have permissions to take this action",
+        int        $code = 403,
         ?Throwable $previous = null
     )
     {
         parent::__construct($message, $code, $previous);
     }
-
 }

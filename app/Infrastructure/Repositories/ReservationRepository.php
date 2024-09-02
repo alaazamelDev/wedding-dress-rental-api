@@ -2,8 +2,9 @@
 
 namespace App\Infrastructure\Repositories;
 
+use App\Exceptions\BadRequestException;
+use App\Exceptions\ForbiddenException;
 use App\Exceptions\NotFoundException;
-use App\Exceptions\UnavailableResourceException;
 use App\Infrastructure\Models\Dress;
 use App\Infrastructure\Models\Reservation;
 
@@ -11,7 +12,7 @@ class ReservationRepository
 {
     /**
      * @throws NotFoundException
-     * @throws UnavailableResourceException
+     * @throws BadRequestException
      */
     public function reserveDress($data)
     {
@@ -21,12 +22,12 @@ class ReservationRepository
             ->with('reservations')
             ->find($dress_id);
         if (!isset($dress)) {
-            throw new NotFoundException(code: 404);
+            throw new NotFoundException();
         }
 
         // check if the dress is available for reservation
         if (!$dress->is_available) {
-            throw new UnavailableResourceException(code: 400);
+            throw new BadRequestException();
         }
 
         // reserve it.
@@ -49,5 +50,48 @@ class ReservationRepository
         return Reservation::query()
             ->with(['dress', 'user'])
             ->find($created->id);
+    }
+
+    /**
+     * @throws NotFoundException
+     * @throws ForbiddenException
+     * @throws BadRequestException
+     */
+    public function completeReservation($data)
+    {
+
+        $reservation_id = $data['id'];
+        $reservation = Reservation::find($reservation_id);
+
+        // first, check for existence of reservation
+        if (!isset($reservation)) {
+            throw new NotFoundException();
+        }
+
+        // check if the user is the owner
+        $user_id = $data['user_id'];
+        if ($reservation->user_id != $user_id) {
+            throw new ForbiddenException();
+        }
+
+        // check if the reservation is already completed
+        if (isset($reservation->end_date)) {
+            throw new BadRequestException(message: "The reservation is already completed!");
+        }
+
+        // compute the actual rental price
+        $rental_price_per_day = $reservation->rental_price_per_day;
+        $actual_duration = max($reservation->expected_due_date->copy()->diffInDays($reservation->start_date), 1);
+        $total_rental_price = max(($actual_duration * $rental_price_per_day), $reservation->expected_rental_price);
+
+        // update the reservation record.
+        $reservation->update([
+            'total_rental_price' => $total_rental_price,
+            'end_date' => now(),
+        ]);
+
+        return Reservation::query()
+            ->with(['user', 'dress'])
+            ->find($reservation_id);
     }
 }
