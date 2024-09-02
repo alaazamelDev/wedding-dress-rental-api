@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->date('expected_due_date');
 
             // the price that is expected to be paid.
-            $table->date('expected_rental_price');
+            $table->double('expected_rental_price');
 
             // the date when the dress IS returned
             $table->date('end_date')->nullable();
