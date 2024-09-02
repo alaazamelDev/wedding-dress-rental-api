@@ -11,6 +11,7 @@ use App\Http\Requests\Reservation\CompleteReservationRequest;
 use App\Http\Requests\Reservation\CreateReservationRequest;
 use App\Http\Resources\Reservation\ReservationResource;
 use App\Utilities\ApiResponse;
+use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
