@@ -2,8 +2,9 @@
 
 namespace App\Application\Services;
 
-use App\Application\UseCases\User\LoginUserUseCase;
+use App\Application\UseCases\User\GetUserByEmailUseCase;
 use App\Application\UseCases\User\RegisterUserUseCase;
+use App\Application\UseCases\User\UpdateUserUseCase;
 use App\Exceptions\UnauthorizedException;
 use App\Utilities\FileStorageHelper;
 use Hash;
@@ -47,7 +48,7 @@ class AuthService
     public function login(array $data)
     {
         // get the user record that matches the email.
-        $user = app(LoginUserUseCase::class)->execute($data);
+        $user = app(GetUserByEmailUseCase::class)->execute($data);
 
         // check the password...
         if (!Hash::check($data['password'], $user->password)) {
@@ -57,5 +58,34 @@ class AuthService
         // Generate a Sanctum token for the user
         return $user->createToken('auth_token')->plainTextToken;
 
+    }
+
+    /**
+     * @throws UnauthorizedException
+     */
+    public function changePassword(array $data)
+    {
+        // get the user record that matches the email.
+        $user = app(GetUserByEmailUseCase::class)->execute($data);
+
+        // check if the old password is matching.
+        if (!Hash::check($data['password'], $user->password)) {
+            throw new UnauthorizedException("The old password is incorrect.");
+        }
+
+        // now, update the password...
+        $new_details = [
+            'id' => $data['id'],
+            'password' => Hash::make($data['new_password']),
+        ];
+
+        // perform the update operation.
+        $updated_user = app(UpdateUserUseCase::class)->execute($new_details);
+
+        // revoke all tokens.
+        $updated_user->tokens()->delete();
+
+        // generate a new token.
+        return $updated_user->createToken('access_token')->plainTextToken;
     }
 }

@@ -11,7 +11,6 @@ use App\Http\Requests\Reservation\CompleteReservationRequest;
 use App\Http\Requests\Reservation\CreateReservationRequest;
 use App\Http\Resources\Reservation\ReservationResource;
 use App\Utilities\ApiResponse;
-use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
@@ -42,11 +41,10 @@ class ReservationController extends Controller
 
     public function completeReservation(CompleteReservationRequest $request)
     {
-//        $user_id = $request->user()->id;
+        $user_id = $request->user()->id;
         $validated = $request->validated();
-        $data = ReservationDTO::fromUpdateRequest($validated);
-//        $data['user_id'] = $user_id;
-        $data['user_id'] = 1;
+        $data = ReservationDTO::fromUpdateRequest($validated['reservation_id']);
+        $data['user_id'] = $user_id;
 
         try {
             $result = $this->reservationService->completeReservation($data);

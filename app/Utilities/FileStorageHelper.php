@@ -33,6 +33,14 @@ class FileStorageHelper
         return $file->storeAs($directory, $fileName, $disk);
     }
 
+    public static function deleteFile(
+        string $file_url,
+        string $disk = 'public',
+    ): bool
+    {
+        return Storage::disk($disk)->delete($file_url);
+    }
+
     public static function getFullUrl($url): ?string
     {
         if (!isset($url))
