@@ -3,6 +3,7 @@
 namespace App\Http\Resources\User;
 
 use App\Infrastructure\Models\User;
+use App\Utilities\FileStorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,7 +16,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'profile_pic_url' => $this->profile_pic_url,    // TODO: Surround it with base url.
+            'profile_pic_url' => FileStorageHelper::getFullUrl($this->profile_pic_url),
             'birth_date' => $this->birth_date?->format('Y-m-d'),
             'email' => $this->email,
         ];
