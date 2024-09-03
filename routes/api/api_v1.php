@@ -22,17 +22,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('/users')->group(function () {
         Route::get('/my-reservations', [UserController::class, 'getUserReservations']);
+        Route::post('/update-profile', [UserController::class, 'updateUserProfile']);
     });
 
-    Route::put('auth/change-password', [AuthController::class, 'changePassword']);
-    Route::get('auth/user', [AuthController::class, 'getUserDetails']);
-    Route::delete('auth/logout', [AuthController::class, 'logout']);
+    Route::prefix('/auth')->group(function () {
+        Route::put('/change-password', [AuthController::class, 'changePassword']);
+        Route::get('/user', [AuthController::class, 'getUserDetails']);
+        Route::delete('/logout', [AuthController::class, 'logout']);
+    });
 
 });
-
 // Public Routes are placed here...
-Route::post('auth/register', [AuthController::class, 'register']);
 
-// The attached middleware is to protect login endpoint from brute force attacks
-Route::post('auth/login', [AuthController::class, 'login'])
-    ->middleware('throttle');
+
+Route::prefix('/auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle');   // protect login endpoint from brute force attacks
+});
+

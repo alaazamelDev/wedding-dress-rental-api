@@ -33,10 +33,15 @@ class UserRepository
             ->first();
     }
 
+    public function findById($id)
+    {
+        return User::find($id);
+    }
+
     public function updateUser($data)
     {
         // update the user data.
-        $updated = User::query()
+        User::query()
             ->whereId($data['id'])
             ->update($data);
 
