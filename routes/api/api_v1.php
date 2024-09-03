@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/my-reservations', [UserController::class, 'getUserReservations']);
     });
 
+    Route::put('auth/change-password', [AuthController::class, 'changePassword']);
     Route::get('auth/user', [AuthController::class, 'getUserDetails']);
     Route::delete('auth/logout', [AuthController::class, 'logout']);
 

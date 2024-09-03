@@ -32,4 +32,14 @@ class UserRepository
             ->where('email', $data['email'])
             ->first();
     }
+
+    public function updateUser($data)
+    {
+        // update the user data.
+        $updated = User::query()
+            ->whereId($data['id'])
+            ->update($data);
+
+        return User::find($data['id']);
+    }
 }

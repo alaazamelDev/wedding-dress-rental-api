@@ -7,7 +7,7 @@ abstract class BaseDTO
 
     public abstract static function fromCreateRequest($data);
 
-    public static function fromUpdateRequest($data = null): array
+    public static function fromUpdateRequest($id, $data = null): array
     {
         return [];
     }

@@ -13,10 +13,10 @@ class ReservationDTO extends BaseDTO
         ];
     }
 
-    public static function fromUpdateRequest($data = null): array
+    public static function fromUpdateRequest($id, $data = null): array
     {
         return [
-            'id' => $data['reservation_id'],
+            'id' => $id,
         ];
     }
 }

@@ -29,6 +29,7 @@ class RegisterUserRequest extends FormRequest
                 'email',
                 'max:254', // Email max length to fit within common email length constraints
                 'unique:users,email', // Ensure email is unique in the users table
+                'lowercase'
             ],
             'password' => [
                 'required',

@@ -2,7 +2,7 @@
 
 namespace App\Application\UseCases\User;
 
-class LoginUserUseCase extends UserBaseUseCase
+class GetUserByEmailUseCase extends UserBaseUseCase
 {
 
     public function execute($data = null)

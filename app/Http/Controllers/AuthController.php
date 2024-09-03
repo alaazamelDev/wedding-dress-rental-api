@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Application\DTOs\UserDTO;
 use App\Application\Services\AuthService;
 use App\Exceptions\UnauthorizedException;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Http\Resources\User\UserResource;
@@ -56,5 +57,22 @@ class AuthController extends Controller
         // Revoke the token that was used to authenticate the current request...
         $request->user()->currentAccessToken()->delete();
         return ApiResponse::success("Logged out successfully...");
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $validated = $request->validated();
+        $user_id = $request->user()->id;
+        $data = UserDTO::fromUpdateRequest($user_id, $validated);
+
+        try {
+            $token = $this->authService->changePassword($data);
+            return ApiResponse::success(['access_token' => $token, 'token_type' => 'Bearer']);
+        } catch (UnauthorizedException $e) {
+            return ApiResponse::error(
+                message: $e->getMessage(),
+                status: $e->getCode(),
+            );
+        }
     }
 }
