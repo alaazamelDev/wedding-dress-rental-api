@@ -31,7 +31,7 @@ Follow these instructions to set up the project locally.
 
    ```bash
    git clone https://github.com/alaazamelDev/wedding-dress-rental-api.git
-   cd wedding-dress-rental-backend
+   cd wedding-dress-rental-api
    ```
 
 2. **Install Dependencies**
