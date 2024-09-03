@@ -8,7 +8,7 @@ abstract class ApiResponse
 {
     public static function success($data = [], $message = null, $status = 200): JsonResponse
     {
-        return response()->json(['data' => $data, 'status_code' => $status], $status);
+        return response()->json(['status_code' => $status, 'data' => $data], $status);
     }
 
     public static function error($message, $status = 400): JsonResponse

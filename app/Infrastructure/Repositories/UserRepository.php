@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repositories;
 
 use App\Infrastructure\Models\Reservation;
+use App\Infrastructure\Models\User;
 
 class UserRepository
 {
@@ -17,5 +18,11 @@ class UserRepository
                 perPage: request('per_page'),
                 page: request('page')
             );
+    }
+
+    public function createUser($data)
+    {
+        return User::query()
+            ->create($data);
     }
 }

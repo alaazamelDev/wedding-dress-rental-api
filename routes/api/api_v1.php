@@ -1,6 +1,7 @@
 <?php
 
 // Dress Resource
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DressController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
@@ -27,3 +28,4 @@ Route::prefix('/users')->group(function () {
 //});
 
 // Public Routes are placed here...
+Route::post('auth/register', [AuthController::class, 'register']);
