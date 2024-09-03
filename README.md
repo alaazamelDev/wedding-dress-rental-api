@@ -4,7 +4,7 @@
 
 ## About
 
-This project is the backend API for a Wedding Dress Rental Service, built with PHP and Laravel 11. It provides functionality for managing dresses, handling user reservations, and implementing user authentication. This backend serves as the core system for managing rental operations, storing data, and handling requests.
+This project is the backend API for a Wedding Dress Rental Service, built with PHP and Laravel 11. It provides functionality for managing dresses, handling user reservations, and implementing user authentication.
 
 ## Features
 
