@@ -17,8 +17,8 @@ class UserController extends Controller
 
     public function getUserReservations(Request $request)
     {
-//        $user_id = $request->user()->id; // TODO: USE IT
-        $reservations = $this->userService->getReservations(1);
+        $user_id = $request->user()->id;
+        $reservations = $this->userService->getReservations($user_id);
         return ReservationResource::collection($reservations);
     }
 }
