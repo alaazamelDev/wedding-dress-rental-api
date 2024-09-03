@@ -18,4 +18,12 @@ class UserDTO extends BaseDTO
             'password' => $data['password'],
         ];
     }
+
+    public static function fromLoginRequest($data): array
+    {
+        return [
+            'email' => $data['email'],
+            'password' => $data['password']
+        ];
+    }
 }

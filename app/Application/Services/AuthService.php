@@ -2,7 +2,9 @@
 
 namespace App\Application\Services;
 
+use App\Application\UseCases\User\LoginUserUseCase;
 use App\Application\UseCases\User\RegisterUserUseCase;
+use App\Exceptions\UnauthorizedException;
 use App\Utilities\FileStorageHelper;
 use Hash;
 
@@ -37,5 +39,23 @@ class AuthService
 
         // Generate a Sanctum token for the registered user
         return $user->createToken('auth_token')->plainTextToken;
+    }
+
+    /**
+     * @throws UnauthorizedException
+     */
+    public function login(array $data)
+    {
+        // get the user record that matches the email.
+        $user = app(LoginUserUseCase::class)->execute($data);
+
+        // check the password...
+        if (!Hash::check($data['password'], $user->password)) {
+            throw new UnauthorizedException("The password is incorrect.");
+        }
+
+        // Generate a Sanctum token for the user
+        return $user->createToken('auth_token')->plainTextToken;
+
     }
 }
